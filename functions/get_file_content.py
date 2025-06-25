@@ -2,8 +2,9 @@ import os
 MAX_CHARS = 10000
 
 def get_file_content(working_directory, file_path):
-    dic = os.path.join(working_directory, file_path)
-    if not os.path.abspath(dic).startswith(os.path.abspath(working_directory)):
+    dic = os.path.abspath(os.path.join(working_directory, file_path))
+    wd = os.path.abspath(working_directory)
+    if os.path.commonpath([wd, dic]) != wd:
         return f'Error: Cannot read "{file_path}" as it is outside the permitted working directory'
     if not os.path.isfile(dic):
         return f'Error: File not found or is not a regular file: "{file_path}"'

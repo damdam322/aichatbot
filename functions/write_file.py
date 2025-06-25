@@ -1,8 +1,9 @@
 import os
 
 def write_file(working_directory, file_path, content):
-    dic = os.path.join(working_directory, file_path)
-    if not os.path.abspath(dic).startswith(os.path.abspath(working_directory)):
+    dic = os.path.abspath(os.path.join(working_directory, file_path))
+    wd = os.path.abspath(working_directory)
+    if os.path.commonpath([wd, dic]) != wd:
         return f"Error: Cannot write to {file_path} as it is outside the permitted working directory"
     
     #validate if path is file path
