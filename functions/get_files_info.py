@@ -1,7 +1,6 @@
 import os
 
-def get_files_info(working_directory, directory=None):
-
+def get_files_info(working_directory, directory=""):
     dic = os.path.abspath(os.path.join(working_directory, directory))
     wd = os.path.abspath(working_directory)
 

@@ -29,7 +29,7 @@ client = genai.Client(api_key=api_key)
 schemas = [
     types.FunctionDeclaration(
         name="get_files_info",
-        description="Lists files in the specified directory along with their sizes, constrained to the working directory.",
+        description="Lists all items in a directory within a specified working directory, returning their names, file sizes, and whether each is a directory. Validates that the target directory is inside the working directory.",
         parameters=types.Schema(
             type=types.Type.OBJECT,
             properties={
@@ -48,7 +48,7 @@ schemas = [
             properties={
                 "file_path": types.Schema(
                     type=types.Type.STRING,
-                    description="The file path to read content out of, relative to the working directory",
+                    description="The file path to read content out of, relative to the working directory, if user provides only file name pass this file name to function it will handle it",
                 ),
             },
         ),
@@ -61,7 +61,7 @@ schemas = [
             properties={
                 "file_path": types.Schema(
                     type=types.Type.STRING,
-                    description="The file path to file to be overwritten with content or created with content, relative to the working directory",
+                    description="The file path to file to be overwritten with content or created with content, relative to the working directory if no path provided only a file working directory is used as path",
                 ),
                 "content": types.Schema(
                     type=types.Type.STRING,
@@ -158,7 +158,7 @@ response = client.models.generate_content(
 def main():
     global messages
     global response
-    
+
     for i in range(MAX_ITERATIONS):
 
         response = client.models.generate_content(
@@ -170,7 +170,8 @@ def main():
             )
         )
 
-        map(lambda candid: messages.append(candid.content), response.candidates)
+        for candid in response.candidates:
+            messages.append(candid.content)
 
         if response.function_calls is None:
             print(response_parsed(verbose))
