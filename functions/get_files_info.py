@@ -1,11 +1,12 @@
 import os
 
 def get_files_info(working_directory, directory=None):
-    if not os.path.isdir(directory):
-        return f'Error: "{directory}" is not a directory'
-    
+
     dic = os.path.abspath(os.path.join(working_directory, directory))
     wd = os.path.abspath(working_directory)
+
+    if not os.path.isdir(dic):
+        return f'Error: "{directory}" is not a directory'
 
     if os.path.commonpath([wd, dic]) != wd:
         return f'Error: Cannot list "{directory}" as it is outside the permitted working directory'
